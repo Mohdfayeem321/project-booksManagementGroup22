@@ -2,6 +2,7 @@ const bookModel = require('../models/bookModel');
 //const userModel = require('../models/userModel');
 const userController = require('../controllers/usercontroller');
 const mongoose = require('mongoose');
+const reviewModel = require('../models/reviewModel');
 
 // ==================================== validations ===================================//
 
@@ -81,9 +82,11 @@ const getBooksByQuery = async function (req, res) {
 
         if (Object.keys(data).length == 0)
         {
-            let allBooks = await bookModel.find({ isDeleted: false })
-            let bookData =allBooks.sort((a, b) => a.title.localeCompare(b.title))
-            return res.status(200).send({ status: true, message: "all books", data: bookData })
+            let allBooks = await bookModel.find({ isDeleted: false }).collation({locale:"en"}).sort({title:1})
+            console.log(allBooks)
+            
+            // let newBook = allBooks.toObject()
+            return res.status(200).send({ status: true, message: "all books", data: allBooks })
         }
 
         let filter = {}
@@ -145,7 +148,13 @@ const getBookById = async function (req, res) {
 
         let booksWithId = await bookModel.findOne({ _id: bookId, isDeleted: false })
         if (!booksWithId) return res.status(404).send({ status: false, message: "Books not found or already deleted" })
-        return res.status(200).send({ status: true, message: "Particular books", data: booksWithId })
+
+        let reviewdata = await reviewModel.find({bookId : bookId,isDeleted : false}).select("_id bookId rating reviewedBy review reviewedAt")
+        
+        const book = booksWithId._doc
+        book["reviewsdata"] = reviewdata
+        
+        return res.status(200).send({ status: true, message: "Particular books", data: book })
     }
     catch (err) {
         return res.status(500).send({ status: false, Error: err.message })
@@ -229,7 +238,6 @@ const deleteBook = async function (req, res) {
             return res.status(400).send({ status: false, message: "Invalid Book Id. please Enter the valid Book Id" })
 
         const getbook = await bookModel.findOne({ _id: bookId, isDeleted: false })
-
         if (!getbook)
             return res.status(404).send({ status: false, message: "No book found or it may be deleted" })
 
