@@ -67,7 +67,7 @@ const createReview = async function (req, res) {
 
         let reviewCreated = await reviewModel.create(data)
         // console.log(reviewCreated)
-        let findreview = await reviewModel.find({ bookId: bookId, isDeleted: false }).select({ _id: 1, bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1 })
+        //let findreview = await reviewModel.find({ bookId: bookId, isDeleted: false }).select({ _id: 1, bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1 })
         // console.log(findreview)
         let reviewCount = await bookModel.findOneAndUpdate({ _id: bookId, isDeleted: false }, { $set: { reviews: findbook.reviews + 1 } }, { new: true })
 
@@ -81,7 +81,7 @@ const createReview = async function (req, res) {
             subcategory: findbook.subcategory,
             releasedAt: findbook.releasedAt,
             reviews: reviewCount.reviews,
-            reviewdata: reviewCreated
+            reviewsData: reviewCreated
         }
         return res.status(201).send({ status: true, message: "review created successfully", data: bookwithreviewdata })
     }
