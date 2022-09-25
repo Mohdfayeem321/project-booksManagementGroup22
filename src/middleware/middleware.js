@@ -17,7 +17,7 @@ const authentication = async function (req, res, next) {
 
         if (!(token)) return res.status(401).send({ status: false, message: "Please enter token" })
 
-        let decodedtoken = jwt.verify(token, 'Scretekeygroup22')
+        let decodedtoken = jwt.verify(token, 'Secretkeygroup22')
 
         if (!decodedtoken) return res.status(401).send({ status: false, message: "Invalid token" })
 

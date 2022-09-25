@@ -1,9 +1,11 @@
-const userModel = require('../models/userModel')
-const jwt = require('jsonwebtoken')
-const moment = require('moment')
+const userModel = require('../models/userModel');
+
+const jwt = require('jsonwebtoken');
+
+const moment = require('moment');
 
 
-//============================== validations ====================================//
+//============================== validations ===================================== //
 
 const isValid = function (value) {
     if (typeof value === 'undefined' || value === null) return false
@@ -46,7 +48,7 @@ const createUser = async function(req,res)
     if(!isVAlidRequestBody(data) ) return res.status(400).send({status:false, message:"please enter user details"})
 
     if(!isValid(title) ) return res.status(400).send({status:false, message:"Please enter title"})
-    if((title!=="Mr") && (!title=="Mrs") && (!title=="Miss")) return res.status(400).send({status:false, message:"title must be Mr, Mrs or Miss"})
+    if (title!=="Mr" && title!=="Mrs" && title!=="Miss")  return res.status(400).send({status:false, message:"title must be Mr, Mrs or Miss"})
     
     
     if(!isValid(name) ) return res.status(400).send({status:false, message:"Please enter name"})
@@ -70,11 +72,12 @@ const createUser = async function(req,res)
    
     
     if(!isValid(password) ) return res.status(400).send({status:false, message:"Please enter password"})
-    if(!matchPass(password)) return res.status(400).send({status:false,message:"Please enter valid password "})
+    if(!matchPass(password)) return res.status(400).send({status:false,message:"Please enter valid password"})
         
 
 
-    if(!isValid(address) ) return res.status(400).send({status:false, message:"Please enter address"})
+    if(!isValid(address)) return res.status(400).send({status:false, message:"Please enter address"})
+    if(!(typeof address === "object")) return res.status(400).send({status:false, message:"Its not a correct format to entering address"})
 
 
     let createuser = await userModel.create(data)
@@ -84,10 +87,9 @@ catch (error) {
     return res.status(500).send({status:false, message:error.message})
         
 } 
-
 }
 
-// ========================================== User login ===================================== //
+// ========================================== User login ===================================================//
 
 const userlogin = async function(req, res)
 {
@@ -96,11 +98,11 @@ const userlogin = async function(req, res)
     let password = req.body.password;
 
 
-    if(!isValid(userName) ) return res.status(400).send({status:false, message:"please use username"})
-    if(!emailMatch(userName)) return res.status(400).send({status:false,message:"please use valid email"})
+    if(!isValid(userName) ) return res.status(400).send({status:false, message:"please enter username"})
+    if(!emailMatch(userName)) return res.status(400).send({status:false,message:"please enter valid email"})
  
-    if(!isValid(password) ) return res.status(400).send({status:false, message:"please use password"})
-    if(!matchPass(password)) return res.status(400).send({status:false,message:"please use special character to make strong password "})
+    if(!isValid(password) ) return res.status(400).send({status:false, message:"please enter password"})
+    if(!matchPass(password)) return res.status(400).send({status:false,message:"please enter correct password "})
 
 
 
@@ -112,7 +114,7 @@ const userlogin = async function(req, res)
         userId : chekUser._id.toString(),
         iat: Math.floor(Date.now()/1000), 
         exp:  Math.floor(moment().add(1, 'days'))
-      }, "Scretekeygroup22"
+      }, "Secretkeygroup22"
       )
       res.setHeader("x-api-key", token);
     return res.status(201).send({status: true, message: "login successfully", data: token, iat: Math.floor(Date.now()/1000), //  create 
