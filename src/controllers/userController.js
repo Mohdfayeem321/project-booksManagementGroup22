@@ -34,6 +34,11 @@ const matchPass = function (value) {
     return regex.test(value)
 }
 
+const isvalidPincode = function (pincode) {
+    if (/^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/.test(pincode)) return true
+    return false
+  };
+
 
 //======================================= Create user ===================================/
 
@@ -75,9 +80,15 @@ const createUser = async function(req,res)
     if(!matchPass(password)) return res.status(400).send({status:false,message:"Please enter valid password"})
         
 
-
-    if(!isValid(address)) return res.status(400).send({status:false, message:"Please enter address"})
-    if(!(typeof address === "object")) return res.status(400).send({status:false, message:"Its not a correct format to entering address"})
+    if(!isValid(address) ) return res.status(400).send({status:false, message:"Please enter address"})
+        // validation for addresss address must nr in obj form
+    if (address && typeof address !=="object") {
+        return res.status(400).send({ status: false, message: "Address is in wrong format" })
+    };
+            // validation for pin code 
+    if (address && address.pincode && !isvalidPincode(address.pincode)) {
+        return res.status(400).send({ status: false, message: "Pincode is in wrong format" })
+    }
 
 
     let createuser = await userModel.create(data)

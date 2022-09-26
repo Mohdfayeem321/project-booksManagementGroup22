@@ -34,7 +34,6 @@ const isvalidrating = function (value) {
 }
 
 
-
 //======================================== Crete review =============================================//
 
 const createReview = async function (req, res) {
@@ -65,11 +64,12 @@ const createReview = async function (req, res) {
         let findbook = await bookModel.findOne({ _id: bookId, isDeleted: false })
         if (!findbook) return res.status(404).send({ status: false, message: "Book not found or book is deleted" })
 
+       
         let reviewCreated = await reviewModel.create(data)
-        // console.log(reviewCreated)
-        //let findreview = await reviewModel.find({ bookId: bookId, isDeleted: false }).select({ _id: 1, bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1 })
-        // console.log(findreview)
         let reviewCount = await bookModel.findOneAndUpdate({ _id: bookId, isDeleted: false }, { $set: { reviews: findbook.reviews + 1 } }, { new: true })
+
+        
+        
 
         let bookwithreviewdata =
         {
@@ -83,7 +83,7 @@ const createReview = async function (req, res) {
             reviews: reviewCount.reviews,
             reviewsData: reviewCreated
         }
-        return res.status(201).send({ status: true, message: "review created successfully", data: bookwithreviewdata })
+        return res.status(201).send({ status: true, message: "Review creation is successful", data: bookwithreviewdata  })
     }
     catch (error) {
         return res.status(500).send({ status: false, message: error.message })
@@ -124,6 +124,8 @@ const updateReview = async function (req, res) {
         if (review) {
             if (!((/[a-zA-Z0-9!%/\"]*$/).test(review))) return res.status(400).send({ status: false, message: "Pleae enter valid review" })
             if (!isValid(review)) return res.status(400).send({ status: false, message: "Please enter review" })
+         if (!((/[a-zA-Z0-9!%/\"]*$/).test(review))) return res.status(400).send({ status: false, message: "Pleae enter valid review" })
+            
         }
 
 
@@ -158,8 +160,7 @@ const updateReview = async function (req, res) {
 
 }
 
-
-
+//_____________________________________Delete review By Book Id _________________________________________//
 
 const deleteReview = async function (req, res) {
 
