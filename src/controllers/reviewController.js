@@ -139,7 +139,8 @@ const updateReview = async function (req, res) {
             let updatedReview = await reviewModel.findOneAndUpdate({ _id: reviewId, isDeleted: false }, { $set: body }, { new: true }).select({ _id: 1, bookId: 1, reviewedBy: 1, reviewedAt: 1, rating: 1, review: 1 })
             if (!updatedReview) return res.status(404).send({ status: false, message: "No review for this reviewId or it may be deleted" })
 
-
+            //Object.keys(checkBook)
+            
             let reviewBookid = updatedReview.bookId
 
             if (!bookId == reviewBookid) return res.status(404).send({ status: false, message: "No book id found which matches with the review book document" })

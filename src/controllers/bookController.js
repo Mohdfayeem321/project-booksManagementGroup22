@@ -68,8 +68,7 @@ const createBooks = async function (req, res) {
         if (!Validation(subcategory)) return res.status(400).send({ status: false, message: "please enter correct subcategory" })
         if (!checkstring(subcategory)) return res.status(400).send({ status: false, message: "Please enter valid formant of subcategory" })
 
-        //if(Object.keys(data).length<7) return res.status(400).send({ status: false, message: "Please enter releasedAt" })
-        
+              
         
         if (!Validation(releasedAt)) return res.status(400).send({ status: false, message: "please enter correct releasedDate" })
         if (!checkreleasedAt(releasedAt)) return res.status(400).send({ status: false, message: "please enter  valid format of  releasedAt" })
