@@ -11,25 +11,21 @@ router.post('/register', userController.createUser)
 router.post('/login', userController.userlogin)
 
 
-router.post('/books',authentication, authorisation, bookController.createBooks )
-router.get('/books',authentication, bookController.getBooksByQuery )
-router.get('/books/:bookId',authentication,bookController.getBookById )
+router.post('/books',authentication, authorisation, bookController.createBooks)
+router.get('/books', authentication,bookController.getBooksByQuery)
+router.get('/books/:bookId',authentication,bookController.getBookById)
 router.put('/books/:bookId' ,authentication,authorisation, bookController.updateBooks)
 router.delete('/books/:bookId',authentication,authorisation, bookController.deleteBook)
 
-
 router.post('/books/:bookId/review', reviewController.createReview)
 router.put('/books/:bookId/review/:reviewId' , reviewController.updateReview)
-router.delete('/books/:bookId/review/:reviewId' , reviewController.deleteReview)
-
-
-
+router.delete('/books/:bookId/review/:reviewId',reviewController.deleteReview)
 
 
 
 
 router.all("/**",  (req, res) => {
-    res.status(404).send({ status: false, msg: "The api you request is not available" })
+    return res.status(400).send({ status: false, msg: "The api you request is not available" })
 });
 
 

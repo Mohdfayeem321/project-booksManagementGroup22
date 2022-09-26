@@ -1,19 +1,22 @@
 const mongoose = require('mongoose')
-const ObjectId = mongoose.Schema.Types.ObjectId
+const ObjectId = mongoose.Schema.Types.ObjectId  //hexadecimal , bson, 
+// model provide crud operations. 
+// mongoose.model provide interface // writer of schema
+//schema 
 
 const reviewSchema = new mongoose.Schema(
     {
         bookId: {
             type: ObjectId,
             required: true,
-            ref: 'Book'
+            ref: "Book"
         },
         reviewedBy: {
             type: String,
             default: "Guest",
             required: true,
             trim: true,
-            value: { type: String, trim: true }   // {value:{type:String}} 
+            value: { type: String, trim: true }
         },
 
         reviewedAt: {
@@ -23,6 +26,7 @@ const reviewSchema = new mongoose.Schema(
         rating: {
             type: Number,
             required: true,
+            trim:true
         },
         review: {
             type: String,
@@ -37,6 +41,4 @@ const reviewSchema = new mongoose.Schema(
 )
 
 
-
-
-module.exports = mongoose.model('Reviws', reviewSchema)
+module.exports = mongoose.model('Review', reviewSchema)
