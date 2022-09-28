@@ -121,8 +121,8 @@ const userlogin = async function(req, res)
 
     const token = await jwt.sign({
         userId : chekUser._id.toString(),
-        iat: Math.floor(Date.now()/1000), 
-        exp:  Math.floor(moment().add(1, 'days'))
+        iat: Math.floor(Date.now()/1000), // create 
+        exp:  Math.floor(moment().add(1, 'days')) // expire
       }, "Secretkeygroup22"
       )
       res.setHeader("x-api-key", token);

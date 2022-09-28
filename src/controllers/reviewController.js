@@ -140,7 +140,7 @@ const updateReview = async function (req, res) {
             checkbooks['updatedReview'] = updatedReview
 
 
-            return res.status(200).send({ status: true, message: checkbooks })
+            return res.status(200).send({ status: true, message:"reveiw updated",data: checkbooks })
         }
         else return res.status(400).send({ status: false, message: " update only from reviewedBy, rating, review" })
 
@@ -176,7 +176,7 @@ const deleteReview = async function (req, res) {
         let decreaseReview = await bookModel.findOneAndUpdate({ $and: [{ _id: bookId }, { isDeleted: false }] }, { $inc: { reviews: -1 } }, { new: true });
 
         if (!decreaseReview) return res.status(404).send({ status: false, message: "No book found with this bookId or it may be deleted" })
-        res.status(200).send({ status: true, message: "deleted successfully", deleteReview: deleteReview, decreaseReview: decreaseReview })
+        res.status(200).send({ status: true, message: "deleted successfully"})
     }
     catch (err) {
         return res.status(500).send({ status: false, message: " server Error", error: err.messag })
