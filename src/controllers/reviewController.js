@@ -45,10 +45,12 @@ const createReview = async function (req, res) {
 
         let data = req.body
         let { reviewedBy, rating, review } = data;
-        data["bookId"] = bookId
-        data["reviewedAt"] = Date.now()
+        
 
         if (!isVAlidRequestBody(data)) return res.status(400).send({ status: false, message: "Please enter review details in body" })
+
+        data["bookId"] = bookId
+        //data["reviewedAt"] = Date.now()
 
         if (reviewedBy) {
             if (!checkstring(reviewedBy)) return res.status(400).send({ status: false, message: "Pleae enter valid reviewedBy" })
@@ -186,7 +188,7 @@ const deleteReview = async function (req, res) {
         let decreaseReview = await bookModel.findOneAndUpdate({ $and: [{ _id: bookId }, { isDeleted: false }] }, { $inc: { reviews: -1 } }, { new: true });
 
         if (!decreaseReview) return res.status(404).send({ status: false, message: "No book found with this bookId or it may be deleted" })
-        res.status(200).send({ status: true, message: "deleted successfully", deleteReview: deleteReview, decreaseReview: decreaseReview })
+        res.status(200).send({ status: true, message: "deleted successfully", deleteReview:deleteReview, decreaseReview: decreaseReview })
     }
     catch (err) {
         return res.status(500).send({ status: false, message: " server Error", error: err.messag })
