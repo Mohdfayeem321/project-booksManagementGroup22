@@ -1,5 +1,8 @@
 const mongoose = require('mongoose')
-const ObjectId = mongoose.Schema.Types.ObjectId
+const ObjectId = mongoose.Schema.Types.ObjectId  //hexadecimal , bson, 
+// model provide crud operations. 
+// mongoose.model provide interface // writer of schema
+//schema 
 
 const reviewSchema = new mongoose.Schema(
     {

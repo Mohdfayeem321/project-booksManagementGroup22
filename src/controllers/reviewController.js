@@ -1,9 +1,7 @@
 const reviewModel = require('../models/reviewModel')
-
 const bookModel = require('../models/bookModel');
-
+const userModel = require('../models/userModel');
 const mongoose = require('mongoose');
-const { find } = require('../models/userModel');
 
 // ====================================== validations =========================================//
 
@@ -60,7 +58,6 @@ const createReview = async function (req, res) {
 
         if (!isvalidrating(rating)) return res.status(400).send({ status: false, message: "Pleae enter valid rating" })
 
-
         if (!checkstring(review)) return res.status(400).send({ status: false, message: "Pleae enter valid review" })
 
         let findbook = await bookModel.findOne({ _id: bookId, isDeleted: false })
@@ -69,9 +66,6 @@ const createReview = async function (req, res) {
        
         let reviewCreated = await reviewModel.create(data)
         let reviewCount = await bookModel.findOneAndUpdate({ _id: bookId, isDeleted: false }, { $set: { reviews: findbook.reviews + 1 } }, { new: true })
-
-        
-        
 
         let bookwithreviewdata =
         {
@@ -126,11 +120,8 @@ const updateReview = async function (req, res) {
         if (review) {
             if (!((/[a-zA-Z0-9!%/\"]*$/).test(review))) return res.status(400).send({ status: false, message: "Pleae enter valid review" })
             if (!isValid(review)) return res.status(400).send({ status: false, message: "Please enter review" })
-         if (!((/[a-zA-Z0-9!%/\"]*$/).test(review))) return res.status(400).send({ status: false, message: "Pleae enter valid review" })
-            
-        }
-
-
+        //  if (!((/[a-zA-Z0-9!%/\"]*$/).test(review))) return res.status(400).send({ status: false, message: "Pleae enter valid review" })
+            }
 
         let checkBook = await bookModel.findOne({ _id: bookId, isDeleted: false })
         if (!checkBook) return res.status(404).send({ status: false, message: "No book found with this bookId or it may be deleted" })
@@ -152,7 +143,7 @@ const updateReview = async function (req, res) {
             checkbooks['updatedReview'] = updatedReview
 
 
-            return res.status(200).send({ status: true, message: checkbooks })
+            return res.status(200).send({ status: true, message:"reveiw updated",data: checkbooks })
         }
         else return res.status(400).send({ status: false, message: " update only from reviewedBy, rating, review" })
 
@@ -188,7 +179,11 @@ const deleteReview = async function (req, res) {
         let decreaseReview = await bookModel.findOneAndUpdate({ $and: [{ _id: bookId }, { isDeleted: false }] }, { $inc: { reviews: -1 } }, { new: true });
 
         if (!decreaseReview) return res.status(404).send({ status: false, message: "No book found with this bookId or it may be deleted" })
+<<<<<<< HEAD
         res.status(200).send({ status: true, message: "deleted successfully", deleteReview:deleteReview, decreaseReview: decreaseReview })
+=======
+        res.status(200).send({ status: true, message: "deleted successfully"})
+>>>>>>> 63c19b9629a2bdc63acc56f35bd2015ab972e5ab
     }
     catch (err) {
         return res.status(500).send({ status: false, message: " server Error", error: err.messag })
